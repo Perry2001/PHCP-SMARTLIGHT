@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="./css/register.css">
+
+    <script src="./js/register.js"></script>
+</head>
+<body>
+
+    
+    <div id="FormContainer">
+        <div class="ImgContainer">
+
+
+        </div>
+        <form id="Form">
+            <h1 id="FormHeading">Sign Up</h1>
+            <div class="Name">
+                <li><label>First Name:</label>
+                    <input type="text" placeholder="John">
+                </li>
+                <li><label>Last Name:</label>
+                    <input type="text" placeholder="Doe">
+                </li>
+            </div>
+            <li>
+                <label>Email:</label>
+                <input type="email" placeholder="johndoe123@gmail.com">
+            </li>
+            <div class="password">
+                <li><label>Password:</label> <input type="password"></li>
+                <li><label>Confirm Password:</label> <input type="password"></li>
+            </div>
+            <div class="course">
+
+                <li><label>Course</label>
+                    <select name="course" id="course">
+                        <option value="BSIT">Bachelor of Science in Information Technology</option>
+                        <option value="BSCS">Bachelor of Science in Computer Science</option>
+                        <option value="BSIS">Bachelor of Science in Information System</option>
+                        <option value="BSCE">Bachelor of Science in Computer Engineering</option>
+                    </select>
+                </li>
+                <li><label>Year</label>
+                    <select name="year" id="year">
+                        <option value="1">1st</option>
+                        <option value="2">2nd</option>
+                        <option value="3">3rd</option>
+                        <option value="4">4th</option>
+                    </select>
+                </li>
+            </div>
+            <li>
+                <label>Phone No:</label><input type="tel" placeholder="09123-345-6789" maxlength="11">
+            </li>
+            <a href="./index.html">already have an account? login here</a>
+            <button type="submit">Sign Up</button>
+
+
+        </form>
+
+    </div>
+
+    
+</body>
+</html>
