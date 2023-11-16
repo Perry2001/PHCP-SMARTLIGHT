@@ -1,3 +1,8 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
   authDomain: "phcp-smartlight.firebaseapp.com",
@@ -9,5 +14,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-  
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+
+export { auth, database };  // Export both auth and database together
