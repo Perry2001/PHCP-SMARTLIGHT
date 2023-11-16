@@ -54,7 +54,7 @@ h1 {
 .ImgContainer {
     overflow: hidden;
     border-radius: 10px;
-    background: url(/public/image/PHCS-logo.jpg);
+    background: url(../image/PHCS-logo.jpg);
     background-size: 100% 100%;
 }
 
