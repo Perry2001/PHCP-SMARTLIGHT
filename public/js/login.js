@@ -1,29 +1,29 @@
 const inputs = document.querySelectorAll(".input");
 
 
-function addcl(){
-	let parent = this.parentNode.parentNode;
-	parent.classList.add("focus");
+function addcl() {
+    let parent = this.parentNode.parentNode;
+    parent.classList.add("focus");
 }
 
-function remcl(){
-	let parent = this.parentNode.parentNode;
-	if(this.value == ""){
-		parent.classList.remove("focus");
-	}
+function remcl() {
+    let parent = this.parentNode.parentNode;
+    if (this.value == "") {
+        parent.classList.remove("focus");
+    }
 }
 
 
 inputs.forEach(input => {
-	input.addEventListener("focus", addcl);
-	input.addEventListener("blur", remcl);
+    input.addEventListener("focus", addcl);
+    input.addEventListener("blur", remcl);
 });
 
 
 
 
 // Import the 'auth' object from firebaseConfig.js
-import { auth } from "./firebaseConfig.js";
+import { auth, database } from "./firebaseConfig.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 
 // onclick listener for login button
@@ -37,13 +37,13 @@ function loginUser(event) {
 
     // Validate that none of the fields are empty
     if (email && password) {
+        // Sign in the user
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Signed in
                 const user = userCredential.user;
-                console.log("User signed in:", user);
-                // Redirect or perform additional actions after successful login
-                window.location.href = "../logged/home.html";
+
+                // Check the status in the Realtime Database
+                checkUserStatus(user.uid);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -55,3 +55,24 @@ function loginUser(event) {
     }
 }
 
+function checkUserStatus(uid) {
+    const userRef = database.ref('users/' + uid);
+
+    userRef.once('value')
+        .then((snapshot) => {
+            const status = snapshot.child('status').val();
+
+            if (status === true) {
+                // Redirect to the dashboard
+                window.location.href = "../logged/home.html";
+            } else {
+                // Display a message or take other actions for inactive accounts
+                alert("Your account is inactive. Please contact support.");
+                // Optionally, sign the user out
+                auth.signOut();
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking user status:", error);
+        });
+}

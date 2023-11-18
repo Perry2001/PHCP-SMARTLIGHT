@@ -6,6 +6,7 @@ import { ref, set } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-dat
 // onclick listener for signup button
 document.getElementById('signup').addEventListener('click', signup);
 
+
 function signup(event) {
     event.preventDefault();
 
@@ -14,9 +15,10 @@ function signup(event) {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    const course = document.getElementById('course').value;
-    const year = document.getElementById('year').value;
+    const position = document.getElementById('position').value;
+    const idNum = document.getElementById('idNum').value;
     const phone = document.getElementById('phone').value;
+    const status = "false";
 
     // Validate passwords
     if (password !== confirmPassword) {
@@ -25,29 +27,41 @@ function signup(event) {
     }
 
     // Validate that none of the fields are empty
-    if (firstName && lastName && email && password && confirmPassword && course && year && phone) {
+    if (firstName && lastName && email && password && confirmPassword && position && idNum && phone) {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
                 const uid = user.uid;
 
-                console.log("Before set operation");
-              // Save additional user information to Realtime Database
-              const userRef = ref(database, 'users/' + uid);  // Use ref() function
-              set(userRef, {
-                  firstName: firstName,
-                  lastName: lastName,
-                  email: email,
-                  course: course,
-                  year: year,
-                  phone: phone
-              });
-              console.log("Before set operation");
+                // Determine the node based on the position
+                let userNode = '';
+                if (position === 'Admin') {
+                    userNode = 'admin';
+                } else if (position === 'Teacher') {
+                    userNode = 'user';
+                } else {
+                    // Handle other positions if needed
+                    alert("Unsupported position");
+                    return;
+                }
+
+                // Save additional user information to the appropriate node in Realtime Database
+                const userRef = ref(database, `${userNode}/${uid}`);
+                set(userRef, {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    position: position,
+                    idNum: idNum,
+                    phone: phone,
+                    status: status
+                    // You may include other fields like course and year here
+                });
 
                 console.log(user);
                 alert("Account created successfully!");
-                //add 2 seconds delay
+                // Add 2 seconds delay
                 setTimeout(function () {
                     window.location.href = "../index.html";
                 }, 1000);

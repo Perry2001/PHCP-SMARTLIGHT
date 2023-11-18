@@ -35,21 +35,13 @@
                 <li><label>Confirm Password:</label> <input type="password" id="confirmPassword" required></li>
             </div>
             <div class="course">
-                <li><label>Course</label>
-                    <select name="course" id="course" required>
-                        <option value="BSIT">Bachelor of Science in Information Technology</option>
-                        <option value="BSCS">Bachelor of Science in Computer Science</option>
-                        <option value="BSIS">Bachelor of Science in Information System</option>
-                        <option value="BSCE">Bachelor of Science in Computer Engineering</option>
+                <li><label>Position</label>
+                    <select name="position" id="position" required>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Admin">Admin</option>
                     </select>
                 </li>
-                <li><label>Year</label>
-                    <select name="year" id="year" required>
-                        <option value="1">1st</option>
-                        <option value="2">2nd</option>
-                        <option value="3">3rd</option>
-                        <option value="4">4th</option>
-                    </select>
+                <li><label>ID Number:</label> <input type="text" id="idNum" name="idNum" pattern="\d{4}-\d{4}" placeholder="1234-1234" ="Please enter a valid account number in the format 1234-1234" required>
                 </li>
             </div>
             <li>

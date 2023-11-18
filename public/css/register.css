@@ -112,7 +112,7 @@ form select:hover {
 
 form .course {
     display: grid;
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 50% 50%;
 }
 
 form select {
