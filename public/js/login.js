@@ -23,8 +23,9 @@ inputs.forEach(input => {
 
 
 // Import the 'auth' object from firebaseConfig.js
-import { auth, database } from "./firebaseConfig.js";
+import { auth, database, firebase } from "./firebaseConfig.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+import { ref, get, getDatabase } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 
 // onclick listener for login button
 document.querySelector('form').addEventListener('submit', loginUser);
@@ -37,13 +38,36 @@ function loginUser(event) {
 
     // Validate that none of the fields are empty
     if (email && password) {
-        // Sign in the user
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                // Check the status in the Realtime Database
-                checkUserStatus(user.uid);
+                const uid = user.uid;
+                const userRef = ref(getDatabase(), 'user/' + uid);
+
+                get(userRef)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const position = snapshot.val().position;
+
+                            // Redirect to the appropriate dashboard
+                            const status = snapshot.val().status;
+
+                            if (status === 'true') {
+                                window.location.href = "../logged/user/dashboard.html";
+
+                            } else {
+                                alert("Your account is still pending approval. Please wait for the admin to approve your account.");
+                            }
+
+                        } else {
+                            // Handle the case where the user data doesn't exist
+                            console.log("User data not found" + userRef);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error checking user position:", error);
+                    });
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -55,24 +79,3 @@ function loginUser(event) {
     }
 }
 
-function checkUserStatus(uid) {
-    const userRef = database.ref('users/' + uid);
-
-    userRef.once('value')
-        .then((snapshot) => {
-            const status = snapshot.child('status').val();
-
-            if (status === true) {
-                // Redirect to the dashboard
-                window.location.href = "../logged/home.html";
-            } else {
-                // Display a message or take other actions for inactive accounts
-                alert("Your account is inactive. Please contact support.");
-                // Optionally, sign the user out
-                auth.signOut();
-            }
-        })
-        .catch((error) => {
-            console.error("Error checking user status:", error);
-        });
-}
