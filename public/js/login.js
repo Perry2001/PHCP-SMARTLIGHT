@@ -21,6 +21,11 @@ inputs.forEach(input => {
 
 
 
+document.getElementById("change-to-admin").addEventListener("click", function () {
+    window.location.href = "./admin-login.html";
+});
+
+
 
 // Import the 'auth' object from firebaseConfig.js
 import { auth, database, firebase } from "./firebaseConfig.js";

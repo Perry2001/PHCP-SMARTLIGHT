@@ -20,6 +20,11 @@ inputs.forEach(input => {
 });
 
 
+document.getElementById("change-to-user").addEventListener("click", function () {
+    window.location.href = "./index.html";
+});
+
+
 
 
 // Import the 'auth' object from firebaseConfig.js
