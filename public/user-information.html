@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHCP ADMIN</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Include Firebase Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #818181;
+      display: block;
+    }
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 1px 16px;
+      height: 1000px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <img src="./logo.png" class="m-2" alt="Dashboard Logo" style="width:100px;">
+
+  <a href="./admin.html">Dashboard</a>
+  <a href="./user-information.html">User Information</a>
+  <a href="./user-logs.html">User Logs</a>
+  <a href="#howItWorks">How It Works</a>
+  <a href="javascript:logout();">Logout</a>
+</div>
+<div class="main-content">
+
+    <h2 class="m-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+
+  
+    <!-- Bootstrap Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">IdNum</th>
+            <th scope="col">FirtName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+            <th scope="col">Position</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows will go here -->
+     
+          <!-- Repeat the above <tr> block for each user entry -->
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Bootstrap Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit Email and Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-user-form">
+            <div class="mb-3">
+              <label for="user-new-email" class="col-form-label">Enter New Email:</label>
+              <input type="email" class="form-control" id="user-new-email" required>
+
+            </div>
+            <div class="mb-3">
+              <label for="user-new-password" class="col-form-label">Enter New Password:</label>
+              <input type="password" class="form-control" id="user-new-password" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="change-details">Change Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+  </div>
+
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+    authDomain: "phcp-smartlight.firebaseapp.com",
+    databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "phcp-smartlight",
+    storageBucket: "phcp-smartlight.appspot.com",
+    messagingSenderId: "208487238165",
+    appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+  };
+  
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const database = firebase.database(app);
+
+
+// Reference to the "user" node in the database
+var usersRef = database.ref('user');
+
+
+// Function to fetch users and update the table
+function fetchUsers() {
+  usersRef.once('value', function(snapshot) {
+    var users = snapshot.val();
+    var tableBody = document.querySelector('.table tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    for (var key in users) {
+      if (users.hasOwnProperty(key)) {
+        var user = users[key];
+        var row = tableBody.insertRow(-1); 
+        row.setAttribute('data-user-id', key);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+
+        // Add some text to the new cells:
+        cell1.textContent = user.idNum || '';
+        cell2.textContent = user.firstName || '';
+        cell3.textContent = user.lastName || '';
+        cell4.textContent = user.phone || '';
+        cell5.textContent = user.email || '';
+        cell6.textContent = user.position || '';
+        cell7.innerHTML = '<button class="btn btn-primary btn-sm btn-edit">Edit</button>';
+      }
+    }
+
+     // Add event listeners to each 'Edit' button
+     document.querySelectorAll('.btn-edit').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var email = this.closest('tr').cells[4].textContent; // Get email from the table row
+        openEditModal(email); // Pass the email to openEditModal function
+      });
+    });
+
+  });
+}
+  
+// Opens the edit user modal and stores the current email
+function openEditModal(email) {
+  const editUserModalElement = document.getElementById('editUserModal');
+  const editUserModal = bootstrap.Modal.getInstance(editUserModalElement) || new bootstrap.Modal(editUserModalElement);
+  editUserModalElement.dataset.currentEmail = email; // Store the current email
+  editUserModal.show();
+}
+
+
+// Function to close the edit user modal
+function closeEditModal() {
+  const editUserModalElement = document.getElementById('editUserModal');
+  const editUserModal = bootstrap.Modal.getInstance(editUserModalElement); // Get existing modal instance
+  if (editUserModal) {
+    editUserModal.hide();
+  }
+  console.log('Modal closed');
+}
+
+
+// When the 'Change Details' button is clicked in the modal
+    document.getElementById('change-details').addEventListener('click', function () {
+        const editUserModalElement = document.getElementById('editUserModal');
+        const currentEmail = editUserModalElement.dataset.currentEmail;
+        const newEmailInput = document.getElementById('user-new-email');
+        const newPassword = document.getElementById('user-new-password').value;
+
+        // Check if the new email input is valid
+        if (!newEmailInput.validity.valid) {
+            // If the email is not valid, show an error message and stop the function
+            alert('Please enter a valid email address.');
+            newEmailInput.focus(); // Focus the email input for the user to correct
+            return; // Stop the function from proceeding
+        }
+
+        const newEmail = newEmailInput.value;
+
+        // Update user email in Firebase Realtime Database
+        var userRef = firebase.database().ref('user');
+        
+                    // Find the user by email and update their record
+        usersRef.orderByChild('email').equalTo(currentEmail).once('value').then(function(snapshot) {
+            if (snapshot.exists()) {
+            const userKey = Object.keys(snapshot.val())[0]; // Get the unique key of the user
+            const userRef = usersRef.child(userKey);
+
+            userRef.update({ email: newEmail }) // Update email in Realtime Database
+            .then(() => {
+                // TODO: Update email in Authentication (requires re-authentication)
+
+                window.location.href = './user-information.html';
+            })
+            .catch(error => {
+                console.error('Error updating user:', error);
+            });
+            }
+        });
+
+        // Required to get the old email and old password
+
+        // // Get the user's auth record using their old email (you need to have it stored)
+        // firebase.auth().signInWithEmailAndPassword(oldEmail, oldPassword).then(function (userCredential) {
+        //     var user = userCredential.user;
+
+        //     // Update the user's email in Firebase Authentication
+        //     user.updateEmail(newEmail).then(function () {
+        //         // Update the user's password
+        //         user.updatePassword(newPassword).then(function () {
+        //             // Email and password updated
+        //             editUserModal.hide();
+        //         }).catch(function (error) {
+        //             // Handle Errors here
+        //             console.error(error);
+        //         });
+        //     }).catch(function (error) {
+        //         // Handle Errors here
+        //         console.error(error);
+        //     });
+        // });
+
+        closeEditModal();
+
+    });
+
+// Event listeners for closing the modal
+document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function(button) {
+  button.addEventListener('click', function() {
+    closeEditModal();
+  });
+});
+
+// Event listeners for closing the modal
+document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function(button) {
+  button.addEventListener('click', function() {
+    closeEditModal();
+  });
+});
+
+
+
+
+  // Authentication State Observer
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in, you might want to update the dashboard content here
+      fetchUsers(); // User is signed in, fetch users
+
+    } else {
+      // No user is signed in, redirect to login page
+      window.location.href = './admin-login.html';
+    }
+  });
+
+  // Logout function
+  function logout() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful, redirect to login page
+      window.location.href = './admin-login.html';
+    }).catch(function(error) {
+      // An error happened
+      console.error('Logout Error', error);
+    });
+  }
+</script>
+
+</body>
+</html>

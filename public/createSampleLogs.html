@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+
+</head>
+<body>
+
+    <h1>Homepage</h1>
+
+
+    <form id="user-form">
+        <input type="text" id="date" placeholder="Enter  date" required>
+        <input type="text" id="device" placeholder="Device Name" required>
+        <input type="text" id="time" placeholder="Time" required>
+        <input type="text" id="room" placeholder="Room Number" required>
+        <input type="text" id="status" placeholder="Button Status" required>
+        <button type="submit">Submit</button>
+      </form>
+
+    <script>
+        // Your web app's Firebase configuration (replace with your own config)
+            var firebaseConfig = {
+        apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+        authDomain: "phcp-smartlight.firebaseapp.com",
+        databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "phcp-smartlight",
+        storageBucket: "phcp-smartlight.appspot.com",
+        messagingSenderId: "208487238165",
+        appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+    };
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = './admin-login.html';
+            } else {
+                // User is logged in, show homepage content
+                // You can also perform other actions here as needed
+            }
+        });
+
+
+        // Handle form submission
+        document.getElementById('user-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Get values from form
+
+
+        var date = document.getElementById('date').value;
+        var device = document.getElementById('device').value;
+        var time = document.getElementById('time').value;
+        var room = document.getElementById('room').value;
+        var status = document.getElementById('status').value;
+
+        // Create a new user object
+        var newLogs = {
+            date: date,
+            device: device,
+            room: room,
+            status: status,
+        };
+
+        // Push new user to Firebase Realtime Database
+        database.ref('logs/wZHHmYLNNbWzKNpuB7N0KGfsvOB2').push(newLogs);
+        database.ref('logs/hZsoxyuDpOgmbPhqb8kocLp4mPk1').push(newLogs);
+        database.ref('logs/ftgAeST5Q3Uta7tohCdx3WzcRTY2').push(newLogs);
+        database.ref('logs/z3nXHuv6lgRp0IdOUHgZ253VCrN2').push(newLogs);
+        database.ref('logs/Nsl2FElJ8UMpbKCYR2Fn2tKpzX93').push(newLogs);
+        database.ref('logs/ftgAeST5Q3Uta7tohCdx3WzcRTY2').push(newLogs);
+
+
+
+        });
+
+       
+
+// 
+
+
+    </script>
+
+</body>
+</html>

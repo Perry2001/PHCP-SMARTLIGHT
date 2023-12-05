@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+
+</head>
+<body>
+
+    <h1>Homepage</h1>
+
+
+    <form id="user-form">
+        <input type="email" id="email" placeholder="Enter email" required>
+        <input type="text" id="firstName" placeholder="Enter first name" required>
+        <input type="text" id="lastName" placeholder="Enter last name" required>
+        <input type="text" id="idNum" placeholder="Enter ID number" required>
+        <input type="text" id="phone" placeholder="Enter phone number" required>
+        <input type="text" id="position" placeholder="Enter position" required>
+        <button type="submit">Submit</button>
+      </form>
+
+    <script>
+        // Your web app's Firebase configuration (replace with your own config)
+            var firebaseConfig = {
+        apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+        authDomain: "phcp-smartlight.firebaseapp.com",
+        databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "phcp-smartlight",
+        storageBucket: "phcp-smartlight.appspot.com",
+        messagingSenderId: "208487238165",
+        appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+    };
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                // User is not logged in, redirect to login page
+                window.location.href = './admin-login.html';
+            } else {
+                // User is logged in, show homepage content
+                // You can also perform other actions here as needed
+            }
+        });
+
+
+        // Handle form submission
+        document.getElementById('user-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Get values from form
+        var email = document.getElementById('email').value;
+        var firstName = document.getElementById('firstName').value;
+        var lastName = document.getElementById('lastName').value;
+        var idNum = document.getElementById('idNum').value;
+        var phone = document.getElementById('phone').value;
+        var position = document.getElementById('position').value;
+
+        // Create a new user object
+        var newUser = {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            idNum: idNum,
+            phone: phone,
+            position: position,
+            status: true
+        };
+
+        // Push new user to Firebase Realtime Database
+        database.ref('user').push(newUser);
+        });
+
+       
+
+// wZHHmYLNNbWzKNpuB7N0KGfsvOB2
+
+
+    </script>
+
+</body>
+</html>
