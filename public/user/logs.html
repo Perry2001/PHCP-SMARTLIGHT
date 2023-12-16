@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHCP</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Include Firebase Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #818181;
+      display: block;
+    }
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 1px 16px;
+      height: 1000px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <img src="../logo.png" class="m-2" alt="Dashboard Logo" style="width:100px;">
+
+  <a href="./homepage.html">Homepage</a>
+  <a href="./logs.html">Logs</a>
+  <a href="#howItWorks">How It Works</a>
+  <a href="javascript:logout();">Logout</a>
+</div>
+
+<div class="main-content">
+  <h2 class="m-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+
+
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Date</th>
+
+        <th scope="col">Room Name</th>
+        <th scope="col">Device Name</th>
+        <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Dynamic rows -->
+    </tbody>
+</table>
+
+</div>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+
+
+
+<script>
+  // Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+    authDomain: "phcp-smartlight.firebaseapp.com",
+    databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "phcp-smartlight",
+    storageBucket: "phcp-smartlight.appspot.com",
+    messagingSenderId: "208487238165",
+    appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+  };
+  
+  // Initialize Firebase
+
+
+  const app = firebase.initializeApp(firebaseConfig);
+  const database = firebase.database(app);
+
+
+// Reference to the "user" node in the database
+var usersRef = database.ref('user');
+
+
+// Opens the edit user modal and fetches the logs for the given user ID
+function viewLogs(userId) {
+  // Fetch logs for the user from the logs/{userId} node in the database
+  var logsRef = database.ref('logs/' + userId);
+  logsRef.once('value', function(logSnapshot) {
+    var logs = logSnapshot.val();
+    var tableBody = document.querySelector('.table tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+// Clear existing rows
+
+    // Iterate over the logs and create a table row for each log entry
+    for (var logKey in logs) {
+      if (logs.hasOwnProperty(logKey)) {
+        var log = logs[logKey];
+        var row = tableBody.insertRow(-1); 
+
+        // Insert cells and set log details
+        row.insertCell(0).textContent = log.date || 'N/A'; 
+        row.insertCell(1).textContent = log.device || 'N/A'; 
+        row.insertCell(2).textContent = log.room || 'N/A';
+        row.insertCell(3).textContent = log.status || 'N/A';
+      }
+    }
+  });
+}
+  
+  // Authentication State Observer
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      var user = firebase.auth().currentUser;
+
+      // User is signed in, you might want to update the dashboard content here
+      viewLogs(user.uid);
+    } else {
+      // No user is signed in, redirect to login page
+      window.location.href = '../index.html';
+    }
+  });
+
+  // Logout function
+  function logout() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful, redirect to login page
+      window.location.href = '../index.html';
+    }).catch(function(error) {
+      // An error happened
+      console.error('Logout Error', error);
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -4,12 +4,15 @@
 <head>
   <title></title>
 
-
-
-
   <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <!-- Firebase Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
 
 
   <link rel="stylesheet" href="./css/login.css">
@@ -25,7 +28,7 @@
       <img src="./image/PHCS-logo.jpg">
     </div>
     <div class="login-content">
-      <form action="/login" method="post">
+      <form action="#" method="post">
         <img id="change-to-admin" src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/avatar.svg">
         <h2 class="title">Welcome Users</h2>
         <div class="input-div one">
@@ -44,6 +47,8 @@
             <input type="password" class="input" id="password" placeholder="Password" required>
           </div>
         </div>
+        <div id="error-message" class="mt-3" style="color: red;"></div>
+
         <input type="submit" class="btn" value="Login">
         <a href="./register.html">Don't have an account yet? Sign Up</a>
       </form>
@@ -52,11 +57,75 @@
 
 
 
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
-  <scrip  type="module" src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
-  <script type="module" src="./js/firebaseConfig.js"></script>
-  <script type="module" src="./js/login.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+    authDomain: "phcp-smartlight.firebaseapp.com",
+    databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "phcp-smartlight",
+    storageBucket: "phcp-smartlight.appspot.com",
+    messagingSenderId: "208487238165",
+    appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Function to handle login
+ // Function to handle login
+ function login() {
+  var userEmail = document.getElementById("email").value;
+  var userPass = document.getElementById("password").value;
+
+  firebase.auth().signInWithEmailAndPassword(userEmail, userPass)
+    .then((userCredential) => {
+      // Signed in, now get the user's custom ID from the users collection
+      return firebase.database().ref('user').orderByChild('email').equalTo(userEmail).once('value');
+    })
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        var userData = snapshot.val();
+        var userKey = Object.keys(userData)[0]; // This will get the key of the first user node in the result
+        var user = userData[userKey];
+
+        // Now you have the user's data, check the position
+        if (user.position === 'Teacher') {
+          // Redirect to the teacher's homepage
+          window.location.href = './user/homepage.html';
+        } else if (user.position === 'Admin') {
+          // Redirect to the admin page
+          window.location.href = './admin.html';
+        } else {
+          // If the position is neither Teacher nor Admin, sign the user out
+          return firebase.auth().signOut();
+        }
+      } else {
+        // No user found with this email in the users collection
+        throw new Error('No user found with the provided email.');
+      }
+    })
+    .catch((error) => {
+      // Handle errors
+      console.error('Login Error', error);
+      document.getElementById("error-message").textContent = error.message;
+      // Sign out the user if not already signed out
+      firebase.auth().signOut();
+    });
+}
+// Attach login function to the form's submit event
+document.addEventListener('DOMContentLoaded', function() {
+  // Attach login function to the form's submit event
+  document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    login();
+  });
+});
+
+</script>
+
 </body>
+
+
+
 
 </html>

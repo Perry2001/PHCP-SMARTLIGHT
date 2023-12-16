@@ -86,19 +86,27 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editUserModalLabel">Edit Email and Password</h5>
+          <h5 class="modal-title" id="editUserModalLabel">Edit User Information</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="edit-user-form">
+            <!-- Fields for first name, last name, phone, and position -->
             <div class="mb-3">
-              <label for="user-new-email" class="col-form-label">Enter New Email:</label>
-              <input type="email" class="form-control" id="user-new-email" required>
-
+              <label for="user-first-name" class="col-form-label">First Name:</label>
+              <input type="text" class="form-control" id="user-first-name" required>
             </div>
             <div class="mb-3">
-              <label for="user-new-password" class="col-form-label">Enter New Password:</label>
-              <input type="password" class="form-control" id="user-new-password" required>
+              <label for="user-last-name" class="col-form-label">Last Name:</label>
+              <input type="text" class="form-control" id="user-last-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="user-phone" class="col-form-label">Phone:</label>
+              <input type="tel" class="form-control" id="user-phone" required>
+            </div>
+            <div class="mb-3">
+              <label for="user-position" class="col-form-label">Position:</label>
+              <input type="text" class="form-control" id="user-position" required>
             </div>
           </form>
         </div>
@@ -167,27 +175,51 @@ function fetchUsers() {
         cell4.textContent = user.phone || '';
         cell5.textContent = user.email || '';
         cell6.textContent = user.position || '';
-        cell7.innerHTML = '<button class="btn btn-primary btn-sm btn-edit">Edit</button>';
+        cell7.innerHTML = '<button class="btn btn-primary btn-sm btn-edit" data-user-id="' + user.id + '">Edit</button>';
       }
     }
 
-     // Add event listeners to each 'Edit' button
-     document.querySelectorAll('.btn-edit').forEach(function(button) {
-      button.addEventListener('click', function() {
-        var email = this.closest('tr').cells[4].textContent; // Get email from the table row
-        openEditModal(email); // Pass the email to openEditModal function
-      });
+        // Add event listeners to each 'Edit' button
+        document.querySelectorAll('.btn-edit').forEach(function(button) {
+        button.addEventListener('click', function() {
+        var userId = this.getAttribute('data-user-id'); // Retrieve the userId from the data attribute
+        openEditModal(userId); // Pass the userId to the openEditModal function
     });
+  });
 
   });
 }
   
 // Opens the edit user modal and stores the current email
-function openEditModal(email) {
-  const editUserModalElement = document.getElementById('editUserModal');
-  const editUserModal = bootstrap.Modal.getInstance(editUserModalElement) || new bootstrap.Modal(editUserModalElement);
-  editUserModalElement.dataset.currentEmail = email; // Store the current email
-  editUserModal.show();
+function openEditModal(userId) {
+  console.log('Opening modal for user ID:', userId);
+  // Query to find user by id or idNum
+  usersRef.orderByChild('id').equalTo(userId).once('value', function(snapshot) {
+    if (snapshot.exists()) {
+      // Get user data
+      var userData = snapshot.val()[Object.keys(snapshot.val())[0]];
+      
+      // Populate the form with user data
+      document.getElementById('user-first-name').value = userData.firstName || '';
+      document.getElementById('user-last-name').value = userData.lastName || '';
+      document.getElementById('user-phone').value = userData.phone || '';
+      document.getElementById('user-position').value = userData.position || '';
+
+      // Show the modal
+      var editUserModalElement = document.getElementById('editUserModal');
+      var editUserModal = new bootstrap.Modal(editUserModalElement);
+      editUserModal.show();
+
+      // Store the key of the user node in a data attribute for later use
+      editUserModalElement.setAttribute('data-user-key', Object.keys(snapshot.val())[0]);
+    } else {
+      console.error('User not found.');
+      alert('User not found.');
+    }
+  }).catch(error => {
+    console.error('Error fetching user data:', error);
+    alert('An error occurred while fetching the user data.');
+  });
 }
 
 
@@ -206,62 +238,35 @@ function closeEditModal() {
     document.getElementById('change-details').addEventListener('click', function () {
         const editUserModalElement = document.getElementById('editUserModal');
         const currentEmail = editUserModalElement.dataset.currentEmail;
-        const newEmailInput = document.getElementById('user-new-email');
-        const newPassword = document.getElementById('user-new-password').value;
+        // Retrieve new details from the form
+        var newFirstName = document.getElementById('user-first-name').value;
+        var newLastName = document.getElementById('user-last-name').value;
+        var newPhone = document.getElementById('user-phone').value;
+        var newPosition = document.getElementById('user-position').value;
 
-        // Check if the new email input is valid
-        if (!newEmailInput.validity.valid) {
-            // If the email is not valid, show an error message and stop the function
-            alert('Please enter a valid email address.');
-            newEmailInput.focus(); // Focus the email input for the user to correct
-            return; // Stop the function from proceeding
-        }
-
-        const newEmail = newEmailInput.value;
+     
 
         // Update user email in Firebase Realtime Database
-        var userRef = firebase.database().ref('user');
-        
-                    // Find the user by email and update their record
-        usersRef.orderByChild('email').equalTo(currentEmail).once('value').then(function(snapshot) {
-            if (snapshot.exists()) {
-            const userKey = Object.keys(snapshot.val())[0]; // Get the unique key of the user
-            const userRef = usersRef.child(userKey);
+        var userRef = database.ref('user/' + editUserModalElement.dataset.userKey);   
+        console.log('Updating user details...');
+        console.log('ref:', userRef);
+        userRef.update({
+          firstName: newFirstName,
+          lastName: newLastName,
+          phone: newPhone,
+          position: newPosition,
+        }).then(function() {
+          fetchUsers();
+          console.log('User details updated successfully!');
+          alert('User details updated successfully!');
 
-            userRef.update({ email: newEmail }) // Update email in Realtime Database
-            .then(() => {
-                // TODO: Update email in Authentication (requires re-authentication)
-
-                window.location.href = './user-information.html';
-            })
-            .catch(error => {
-                console.error('Error updating user:', error);
-            });
-            }
+        }).catch(function(error) {
+          console.error('Error updating user details:', error);
+          alert('An error occurred while updating the user details.');
+            
         });
 
-        // Required to get the old email and old password
-
-        // // Get the user's auth record using their old email (you need to have it stored)
-        // firebase.auth().signInWithEmailAndPassword(oldEmail, oldPassword).then(function (userCredential) {
-        //     var user = userCredential.user;
-
-        //     // Update the user's email in Firebase Authentication
-        //     user.updateEmail(newEmail).then(function () {
-        //         // Update the user's password
-        //         user.updatePassword(newPassword).then(function () {
-        //             // Email and password updated
-        //             editUserModal.hide();
-        //         }).catch(function (error) {
-        //             // Handle Errors here
-        //             console.error(error);
-        //         });
-        //     }).catch(function (error) {
-        //         // Handle Errors here
-        //         console.error(error);
-        //     });
-        // });
-
+       
         closeEditModal();
 
     });
