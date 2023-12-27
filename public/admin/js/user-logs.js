@@ -114,4 +114,20 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-// Logout function
+// print function
+
+function printModalContent() {
+    var contentToPrint = document.querySelector('.modal-content').innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = contentToPrint; // Replace the body contents with the modal content.
+
+    window.print(); // Print the page.
+
+    document.body.innerHTML = originalContents; // Restore the original contents.
+
+    closeEditModal();
+    //refresh page
+    window.location.reload();
+}
+

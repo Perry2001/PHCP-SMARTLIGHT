@@ -13,7 +13,19 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
     <script src="js/firebase-init.js"></script>
 
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+
+    </style>
+
 </head>
+
+
+
 <body>
 
 <div id="sidebar-container" class="sidebar"></div>
@@ -73,7 +85,8 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary no-print" onclick="printModalContent()">Print</button>
+                <button type="button" class="btn btn-secondary no-print" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
