@@ -5,121 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PHCP</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="../logo.png">
 
   <!-- Include Firebase Libraries -->
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .sidebar {
-      height: 100%;
-      width: 250px;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      padding-top: 20px;
-    }
-    .sidebar a {
-      padding: 10px 15px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #818181;
-      display: block;
-    }
-    .sidebar a:hover {
-      color: #f1f1f1;
-    }
-    .main-content {
-      margin-left: 250px;
-      padding: 1px 16px;
-      height: 1000px;
-    }
-
-
-    /* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-  </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <img src="../logo.png" class="m-2" alt="Dashboard Logo" style="width:100px;">
+  <div id="sidebar-container" class="sidebar"></div>
 
-  <a href="./homepage.html">Homepage</a>
-  <a href="./logs.html">Logs</a>
-  <a href="#howItWorks">How It Works</a>
-  <a href="javascript:logout();">Logout</a>
-</div>
 
 <div class="main-content">
-  <h2 class="m-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+
+    <div class="header">
+        <div class="header-content my-4 ">
+            <button class="hamburger" aria-label="Open sidebar" onclick="toggleSidebar()">&#9776;</button>
+            <h2 class="ml-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+        </div>
+    </div>
+
 
 
 
@@ -172,10 +79,13 @@ input:checked + .slider:before {
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-
+<script src="sidebar.js"></script>
 
 
 <script>
+
+
+
   // Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",

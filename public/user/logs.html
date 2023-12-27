@@ -5,59 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PHCP</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
-
+<!--  icon-->
+  <link rel="icon" href="../logo.png">
+  <link rel="stylesheet" href="style.css">
   <!-- Include Firebase Libraries -->
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .sidebar {
-      height: 100%;
-      width: 250px;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      padding-top: 20px;
-    }
-    .sidebar a {
-      padding: 10px 15px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #818181;
-      display: block;
-    }
-    .sidebar a:hover {
-      color: #f1f1f1;
-    }
-    .main-content {
-      margin-left: 250px;
-      padding: 1px 16px;
-      height: 1000px;
-    }
-  </style>
+  
 </head>
 <body>
 
-<div class="sidebar">
-    <img src="../logo.png" class="m-2" alt="Dashboard Logo" style="width:100px;">
+<div id="sidebar-container" class="sidebar"></div>
 
-  <a href="./homepage.html">Homepage</a>
-  <a href="./logs.html">Logs</a>
-  <a href="#howItWorks">How It Works</a>
-  <a href="javascript:logout();">Logout</a>
-</div>
 
 <div class="main-content">
-  <h2 class="m-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
 
-
+  <div class="header">
+    <div class="header-content my-4 ">
+      <button class="hamburger" aria-label="Open sidebar" onclick="toggleSidebar()">&#9776;</button>
+      <h2 class="ml-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+    </div>
+  </div>
 
   <table class="table">
     <thead>
@@ -80,6 +49,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 
 
+<script src="sidebar.js"></script>
 
 <script>
   // Firebase configuration
@@ -104,6 +74,7 @@
 var usersRef = database.ref('user');
 
 
+
 // Opens the edit user modal and fetches the logs for the given user ID
 function viewLogs(userId) {
   // Fetch logs for the user from the logs/{userId} node in the database
@@ -118,11 +89,11 @@ function viewLogs(userId) {
     for (var logKey in logs) {
       if (logs.hasOwnProperty(logKey)) {
         var log = logs[logKey];
-        var row = tableBody.insertRow(-1); 
+        var row = tableBody.insertRow(-1);
 
         // Insert cells and set log details
-        row.insertCell(0).textContent = log.date || 'N/A'; 
-        row.insertCell(1).textContent = log.device || 'N/A'; 
+        row.insertCell(0).textContent = formatDate(log.date) || 'N/A';
+        row.insertCell(1).textContent = log.device || 'N/A';
         row.insertCell(2).textContent = log.room || 'N/A';
         row.insertCell(3).textContent = log.status || 'N/A';
       }
@@ -152,6 +123,25 @@ function viewLogs(userId) {
       // An error happened
       console.error('Logout Error', error);
     });
+  }
+
+  //format date
+  function formatDate(isoString) {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let date = new Date(isoString);
+
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
+
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${months[monthIndex]} ${day} ${year}, ${hours}:${minutes} ${ampm}`;
   }
 </script>
 
