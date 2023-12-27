@@ -29,9 +29,64 @@
   </div>
 
 
+  <div class="container-fluid my-3">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Ensure that data-bs-target matches the modal id -->
+        <button type="button" class="btn btn-primary" onclick="addRoom()">
+          Add Room
+        </button>
+      </div>
+    </div>
+  </div>
 
 
-  <!-- Bootstrap Table -->
+
+    <!-- Bootstrap Modal for Add Room -->
+  <div class="modal fade" id="AddRoomModal" tabindex="-1" aria-labelledby="AddRoomLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="AddRoomLabel">Add Room</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+        </div>
+        <div class="modal-body">
+          <form action="#" method="post" id="addRoom">
+            <label for="roomName" class="form-label">Room Name</label>
+            <input type="text" class="form-control" id="roomName" placeholder="Enter Room Name">
+            <button type="submit"  class="btn btn-primary mt-3">
+              Add Room
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap Modal for Device -->
+  <div class="modal fade" id="AddDeviceModal" tabindex="-1" aria-labelledby="AddDeviceLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="AddDeviceLabel">Manage Devices</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+        </div>
+        <div class="modal-body">
+          <form action="#" method="post" id="addDevices">
+            <label for="deviceName" class="form-label">Device Name</label>
+            <input type="text" class="form-control" id="deviceName" placeholder="ex. Electric fan">
+            <button type="submit" class="btn btn-primary mt-3">
+              Add Device
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap Table for Room -->
   <div class="table-responsive">
     <table class="table">
       <thead>
@@ -49,7 +104,9 @@
   </div>
 
 
-  <!-- Bootstrap Modal -->
+
+
+  <!-- Room Device Bootstrap Modal -->
   <div class="modal fade" id="roomDeviceModal" tabindex="-1" aria-labelledby="roomDeviceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -70,6 +127,11 @@
             <!-- Dynamic rows -->
             </tbody>
           </table>
+
+          <button type="button"  class="btn btn-primary  mt-3 btn-block"  onclick="addDevices()">
+            Add Device
+          </button>
+
         </div>
       </div>
     </div>

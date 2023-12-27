@@ -1,6 +1,6 @@
 // Ensure this code runs after the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-
+var devicekeyGlobal;
+var deviceNameGlobal;
     // Authentication State Observer
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     var roomName = this.getAttribute('data-room');
 
                     openModal(id, roomName); // Pass the room ID and name to the openModal function
+                    devicekeyGlobal = id;
+                    deviceNameGlobal = roomName;
                 });
             });
         });
@@ -98,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Error: ' + error.message);
             });
     }
+
 
     // Function to log device status changes
     function logDeviceStatusChange(deviceKey, deviceStatus, roomName, deviceName) {
@@ -159,5 +162,124 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Logout function
+
+
+
+//add room
+function addRoom() {
+    const add = new bootstrap.Modal(document.getElementById('AddRoomModal'));
+    add.show();
+}
+document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function (button) {
+    button.addEventListener('click', function () {
+        closeAddRoomModal();
+    });
+});
+
+function closeAddRoomModal() {
+    const addRoomModalElement = document.getElementById('AddRoomModal');
+    const addRoomModal = bootstrap.Modal.getInstance(addRoomModalElement); // Get existing modal instance
+
+    if (addRoomModal) {
+        addRoomModal.hide();
+    }
+    console.log('addRoomModal closed');
+}
+
+
+//add room to Firebase
+document.addEventListener('DOMContentLoaded', function() {
+    // Para sa signup form
+    var signupForm = document.getElementById('addRoom');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            addRoomToFirebase();
+        });
+    }
+
+    function addRoomToFirebase() {
+        var roomName = document.getElementById('roomName').value;
+        var roomRef = firebase.database().ref('room').push();
+        roomRef.set({
+            RoomName: roomName,
+        }).then(function() {
+            console.log('Room added successfully!');
+            alert('Room added successfully!');
+            fetchRooms();
+            closeAddRoomModal();
+        }).catch(function(error) {
+            console.error('Error adding room: ', error);
+            alert('Error adding room: ' + error.message);
+        });
+    }
+
+});
+
+
+//ADD DEVICES Modal
+
+function addDevices() {
+    const addDevices = new bootstrap.Modal(document.getElementById('AddDeviceModal'));
+    closeEditModal();
+    console.log("DeviceKey", devicekeyGlobal)
+    addDevices.show();
+}
+
+//close
+document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function (button) {
+    button.addEventListener('click', function () {
+        closeAddDevices();
+    });
+});
+function closeAddDevices() {
+    const addDeviceModalElement = document.getElementById('AddDeviceModal');
+    const addDeviceModal = bootstrap.Modal.getInstance(addDeviceModalElement); // Get existing modal instance
+
+    if (addDeviceModal) {
+        addDeviceModal.hide();
+    }
+
+
+    console.log('AddDeviceModal closed');
+}
+
+
+//add device to firebase
+document.addEventListener('DOMContentLoaded', function() {
+    // Para sa signup form
+    const form = document.getElementById('addDevices');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            addDeviceToFirebase();
+        });
+    }
+
+    function addDeviceToFirebase() {
+        var deviceName = document.getElementById('deviceName').value;
+        var devicesRef = firebase.database().ref('devices').push();
+        devicesRef.set({
+            DevicesName: deviceName,
+            RoomId: devicekeyGlobal.toString(),
+            Status: 0,
+        }).then(function() {
+            console.log('Device added successfully!');
+            alert('Device added successfully!');
+            fetchRoomsAndDevices(devicekeyGlobal.toString(), deviceNameGlobal);
+            closeAddDevices();
+            var roomDeviceModal = new bootstrap.Modal(document.getElementById('roomDeviceModal'));
+            roomDeviceModal.show();
+
+        }).catch(function(error) {
+            console.error('Error adding room: ', error);
+            alert('Error adding devices: ' + error.message);
+        });
+    }
+
+    // Create a new user object
+
+
 });
