@@ -12,10 +12,12 @@
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="js/firebase-init.js"></script>
+
 </head>
 <body>
 
-  <div id="sidebar-container" class="sidebar"></div>
+<div id="sidebar-container" class="sidebar"></div>
 
 
 <div class="main-content">
@@ -54,7 +56,7 @@
         <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title" id="roomDeviceModalLabel">Room and Device Status</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
             <table class="table">
@@ -79,195 +81,9 @@
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-<script src="sidebar.js"></script>
+<script src="js/sidebar.js"></script>
+  <script src="js/homepage.js"></script>
 
-
-<script>
-
-
-
-  // Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
-    authDomain: "phcp-smartlight.firebaseapp.com",
-    databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "phcp-smartlight",
-    storageBucket: "phcp-smartlight.appspot.com",
-    messagingSenderId: "208487238165",
-    appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
-  };
-  
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-
-
-  const database = firebase.database(app);
-
-
-// Reference to the "user" node in the database
-var roomRefs = database.ref('room');
-
-
-
-function logDeviceStatusChange(deviceKey, deviceStatus, roomName, deviceName) {
-  // Check if the user is signed in
-  var user = firebase.auth().currentUser;
-  if (user) {
-    // Get the current timestamp
-    var timestamp = new Date().toISOString();
-
-    // Create a log entry
-    var logEntry = {
-      date: timestamp, // Current date and time
-      device: deviceName, // The name of the device being logged
-      deviceid: deviceKey,
-      room: roomName, // The room in which the device is located
-      status: deviceStatus ? "ON" : "OFF" // Device status based on the toggle
-    };
-
-    // Get a new key for a new log entry under the deviceKey and user's uid
-    var newLogKey = firebase.database().ref('logs').child(user.uid).push().key;
-
-    // Write the new log entry
-    firebase.database().ref(`logs/${user.uid}/${newLogKey}`).set(logEntry)
-    .then(() => {
-      console.log('Log entry added.');
-    })
-    .catch((error) => {
-      console.error('Error writing new log entry:', error);
-    });
-  } else {
-    console.error('No user is signed in to log device status change.');
-  }
-}
-
-
-
-// Function to fetch rooms and update the table
-function fetchRooms() {
-    roomRefs.once('value', function(snapshot) {
-    var rooms = snapshot.val();
-    var tableBody = document.querySelector('.table tbody');
-    tableBody.innerHTML = ''; // Clear existing rows
-
-    for (var key in rooms) {
-      if (rooms.hasOwnProperty(key)) {
-        var room = rooms[key];
-        var row = tableBody.insertRow(-1); 
-        row.setAttribute('data-id', key);
-        row.setAttribute('data-room', room.RoomName);
-
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-      
-        // Add some text to the new cells:
-        cell1.textContent = room.RoomName || '';
-        cell2.innerHTML = '<button class="btn btn-primary btn-sm btn-edit" data-id="' + key + '" data-room="' + room.RoomName + '">View</button>';
-        console.log("Room" , room);
-        console.log("Key" , key);
-
-      }
-    }
-
-        // Add event listeners to each 'Edit' button
-        document.querySelectorAll('.btn-edit').forEach(function(button) {
-        button.addEventListener('click', function() {
-        var id = this.getAttribute('data-id'); // Retrieve the userId from the data attribute
-        var roomName = this.getAttribute('data-room'); // Retrieve the userId from the data attribute
-
-        openModal(id,roomName); // Pass the userId to the openEditModal function
-    });
-  });
-
-  });
-  
-}
-
-
-
-function fetchRoomsAndDevices(id, roomName) {
-  console.log("ID", id);
-  console.log("RoomName", roomName);
-
-  var modalTableBody = document.querySelector('#roomDeviceModal .table tbody');
-  modalTableBody.innerHTML = ''; // Clear existing rows
-
-  // Query devices that have the specified RoomId
-  var devicesRef = firebase.database().ref('devices').orderByChild('RoomId').equalTo(id);
-  devicesRef.once('value')
-    .then((deviceSnapshot) => {
-      var devices = deviceSnapshot.val();
-      if (!devices) {
-        throw new Error('No devices found for the room.');
-      }
-      for (var deviceKey in devices) {
-        if (devices.hasOwnProperty(deviceKey)) {
-          var device = devices[deviceKey];
-          var row = modalTableBody.insertRow(-1);
-
-          var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);
-          var cell3 = row.insertCell(2);
-
-          cell1.textContent = roomName; // Use the passed roomName
-          cell2.textContent = device.DevicesName || 'No Device Name';
-          // Set up the toggle switch with event listener for changes
-          cell3.innerHTML = '<label class="switch"><input type="checkbox" class="device-status-toggle" data-device-key="' + deviceKey + '"' + (device.Status === "1" ? ' checked' : '') + '><span class="slider round"></span></label>';
-        }
-      }
-      // Add change event listener to all toggle switches after they have been created
-      var toggleSwitches = modalTableBody.getElementsByClassName('device-status-toggle');
-      for (var i = 0; i < toggleSwitches.length; i++) {
-        toggleSwitches[i].addEventListener('change', function(e) {
-          var deviceKey = e.target.getAttribute('data-device-key');
-          var newStatus = e.target.checked ? "1" : "0";
-          firebase.database().ref('devices/' + deviceKey).update({ Status: newStatus })
-            .catch((error) => {
-              console.error('Error updating status:', error);
-              alert('Failed to update status: ' + error.message);
-            });
-            console.log("DeviceKey", deviceKey);
-            logDeviceStatusChange(deviceKey, e.target.checked, roomName, device.DevicesName);
-
-        });
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching devices:', error);
-      alert('Error: ' + error.message);
-    });
-}
-
-// Function to open the modal
-function openModal(roomId, roomName) {
-  fetchRoomsAndDevices(roomId, roomName);
-  var roomDeviceModal = new bootstrap.Modal(document.getElementById('roomDeviceModal'));
-  roomDeviceModal.show();
-}
-
-
-  // Authentication State Observer
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        fetchRooms(); // User is signed in, fetch users
-
-    } else {
-      // No user is signed in, redirect to login page
-      window.location.href = '../index.html';
-    }
-  });
-
-  // Logout function
-  function logout() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful, redirect to login page
-      window.location.href = '../index.html';
-    }).catch(function(error) {
-      // An error happened
-      console.error('Logout Error', error);
-    });
-  }
-</script>
 
 </body>
 </html>

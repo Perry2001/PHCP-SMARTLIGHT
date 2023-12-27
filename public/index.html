@@ -73,45 +73,80 @@
 
   // Function to handle login
  // Function to handle login
- function login() {
-  var userEmail = document.getElementById("email").value;
-  var userPass = document.getElementById("password").value;
+  function login() {
+    var userEmail = document.getElementById("email").value;
+    var userPass = document.getElementById("password").value;
 
-  firebase.auth().signInWithEmailAndPassword(userEmail, userPass)
-    .then((userCredential) => {
-      // Signed in, now get the user's custom ID from the users collection
-      return firebase.database().ref('user').orderByChild('email').equalTo(userEmail).once('value');
-    })
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        var userData = snapshot.val();
-        var userKey = Object.keys(userData)[0]; // This will get the key of the first user node in the result
-        var user = userData[userKey];
+    firebase.auth().signInWithEmailAndPassword(userEmail, userPass)
+            .then((userCredential) => {
+              // Signed in
+              return firebase.database().ref('user').orderByChild('email').equalTo(userEmail).once('value');
+            })
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                var userData = snapshot.val();
+                var userKey = Object.keys(userData)[0]; // This will get the key of the first user node in the result
+                var user = userData[userKey];
 
-        // Now you have the user's data, check the position
-        if (user.position === 'Teacher') {
-          // Redirect to the teacher's homepage
-          window.location.href = './user/homepage.html';
-        } else if (user.position === 'Admin') {
-          // Redirect to the admin page
-          window.location.href = './admin.html';
-        } else {
-          // If the position is neither Teacher nor Admin, sign the user out
-          return firebase.auth().signOut();
-        }
-      } else {
-        // No user found with this email in the users collection
-        throw new Error('No user found with the provided email.');
-      }
-    })
-    .catch((error) => {
-      // Handle errors
-      console.error('Login Error', error);
-      document.getElementById("error-message").textContent = error.message;
-      // Sign out the user if not already signed out
-      firebase.auth().signOut();
-    });
-}
+                console.log(user.status)
+                //  user's status
+                if (user.status === 'ok') {
+                  //  based on the user's position
+                  if (user.position === 'Teacher') {
+                    // Redirect to the teacher's homepage
+                    window.location.href = './user/homepage.html';
+                  }else if(user.position === 'Admin'){
+                    window.location.href = './admin/admin.html';
+                  } else {
+                      // If ang  position is not Teacher , sign the user out
+                      return firebase.auth().signOut();
+                    }
+                  }
+
+                else if (user.status === 'blocked') {
+                  alert("Your Account was blocked");
+                  //  sign out the user
+                  return firebase.auth().signOut();
+                } else if (user.status === 'pending') {
+                  alert("Your account is still reviewing. Thank you for your patience.");
+                  //  sign out the user
+                  return firebase.auth().signOut();
+                } else {
+                  return firebase.auth().signOut();
+
+                }
+              } else {
+                // No user found
+                throw new Error('No user found with the provided email.');
+              }
+            })
+            .catch((error) => {
+              // Specific error handling for authentication errors
+              console.log(error.code);
+              switch (error.code) {
+                case 'auth/internal-error':
+                  document.getElementById("error-message").textContent = "No account found . Please Sign Up First";
+                  break;
+                case 'auth/wrong-password':
+
+                case 'auth/user-not-found':
+                  // Handle wrong email/password and no account found
+                  document.getElementById("error-message").textContent = "Incorrect Email or Password.";
+                  break;
+                case 'auth/invalid-email':
+                  document.getElementById("error-message").textContent = "Invalid email format.";
+                  break;
+                default:
+                  // Handle other errors
+                  alert(error.message);
+
+                  // Sign out the user if not already signed out
+                  firebase.auth().signOut();
+              }
+
+            });
+  }
+
 // Attach login function to the form's submit event
 document.addEventListener('DOMContentLoaded', function() {
   // Attach login function to the form's submit event

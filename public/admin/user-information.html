@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHCP ADMIN</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="icon" href="../logo.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- Include Firebase Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  <script src="js/firebase-init.js"></script>
+
+</head>
+<body>
+
+<div id="sidebar-container" class="sidebar"></div>
+
+
+<div class="main-content">
+
+  <div class="header">
+    <div class="header-content my-4 ">
+      <button class="hamburger" aria-label="Open sidebar" onclick="toggleSidebar()">&#9776;</button>
+      <h2 class="ml-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+    </div>
+  </div>
+
+    <!-- Bootstrap Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">IdNum</th>
+            <th scope="col">FirtName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+            <th scope="col">Position</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows will go here -->
+     
+          <!-- Repeat the above <tr> block for each user entry -->
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Bootstrap Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit User Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-user-form">
+            <!-- Fields for first name, last name, phone, and position -->
+            <div class="mb-3">
+              <label for="user-first-name" class="col-form-label">First Name:</label>
+              <input type="text" class="form-control" id="user-first-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="user-last-name" class="col-form-label">Last Name:</label>
+              <input type="text" class="form-control" id="user-last-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="user-phone" class="col-form-label">Phone:</label>
+              <input type="tel" class="form-control" id="user-phone" required>
+            </div>
+            <div class="mb-3">
+              <label for="user-position" class="col-form-label">Position:</label>
+              <select name="position" class="form-select" id="user-position" required>
+                <option value="Teacher">Teacher</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="change-details">Change Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Confirmation Modal -->
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmStatusChangeModal" tabindex="-1" aria-labelledby="confirmStatusChangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmStatusChangeModalLabel">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+        </div>
+        <div class="modal-body">
+          Are you sure?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="confirm-change-status">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  </div>
+
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<script src="js/sidebar.js"></script>
+
+<script src="js/user-information.js"></script>
+
+</body>
+</html>

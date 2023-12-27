@@ -12,11 +12,14 @@
 </head>
 <body>
 
-    <h1>Homepage</h1>
+    <h1>ADD ROOM</h1>
 
 
     <form id="user-form">
-        <input type="text" id="RoomName" placeholder="Enter Room Name" required>
+        <input type="text" id="RoomId" placeholder="Enter Room Id" required>
+        <input type="text" id="DevicesName" placeholder="Enter Devices" required>
+        <input type="text" id="Status" placeholder="Enter Status" required>
+
         <button type="submit">Submit</button>
       </form>
 
@@ -38,7 +41,7 @@
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 // User is not logged in, redirect to login page
-                window.location.href = './admin-login.html';
+                window.location.href = '../admin-login.html';
             } else {
                 // User is logged in, show homepage content
                 // You can also perform other actions here as needed
@@ -51,16 +54,21 @@
         e.preventDefault();
 
         // Get values from form
-        var RoomName = document.getElementById('RoomName').value;
+        var RoomId = document.getElementById('RoomId').value;
+        var DevicesName = document.getElementById('DevicesName').value;
+        var Status = document.getElementById('Status').value;
 
 
         // Create a new user object
-        var newRoom = {
-            RoomName: RoomName,
+        var newDevices = {
+            RoomId: RoomId,
+            DevicesName: DevicesName,
+            Status: Status,
+
         };
 
         // Push new user to Firebase Realtime Database
-        database.ref('room').push(newRoom);
+        database.ref('devices').push(newDevices);
         });
 
        

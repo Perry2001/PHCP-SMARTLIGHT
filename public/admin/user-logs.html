@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Logs</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../logo.png">
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="js/firebase-init.js"></script>
+
+</head>
+<body>
+
+<div id="sidebar-container" class="sidebar"></div>
+
+
+<div class="main-content">
+
+    <div class="header">
+        <div class="header-content my-4 ">
+            <button class="hamburger" aria-label="Open sidebar" onclick="toggleSidebar()">&#9776;</button>
+            <h2 class="ml-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with Arduino Integration</h2>
+        </div>
+    </div>
+
+  
+    <!-- Bootstrap Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">IdNum</th>
+            <th scope="col">FirtName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+            <th scope="col">Position</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+     
+        </tbody>
+      </table>
+    </div>
+  
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- modal-lg for a larger modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Device Event Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Device Name</th>
+                            <th scope="col">Room Number</th>
+                            <th scope="col">Button Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+  </div>
+
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<script src="js/sidebar.js"></script>
+
+<script src="js/user-logs.js"></script>
+
+</body>
+</html>

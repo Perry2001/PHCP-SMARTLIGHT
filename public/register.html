@@ -39,10 +39,9 @@
                 <li><label>Position</label>
                     <select name="position" id="position" required>
                         <option value="Teacher">Teacher</option>
-                        <option value="Admin">Admin</option>
                     </select>
                 </li>
-                <li><label>ID Number:</label> <input type="text" id="idNum" name="idNum" pattern="\d{4}-\d{4}" placeholder="1234-1234" ="Please enter a valid account number in the format 1234-1234" required>
+                <li><label>ID Number:</label> <input type="text" id="idNum" name="idNum" pattern="\d{4}-\d{4}" placeholder="1234-1234"  required>
                 </li>
             </div>
             <li>
@@ -112,10 +111,10 @@ const database = firebase.database(app);
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                position: position,
+                position: "Teacher",
                 idNum: idNum,
                 phone: phone,
-                status: 1
+                status: "pending",
             };
 
             // Push new user to Firebase Realtime Database
@@ -124,8 +123,8 @@ const database = firebase.database(app);
                     alert('Error creating user.');
 
                 } else {
-                    alert('User created successfully.');
-                    window.location.href = './user/homepage.html';
+                    alert('Admin will review your account.');
+                    window.location.href = 'index.html';
                 }
             });
 

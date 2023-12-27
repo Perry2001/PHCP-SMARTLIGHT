@@ -1,0 +1,165 @@
+body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+}
+
+.header-content {
+    display: flex; /* This creates a flex container which aligns children in a row */
+    align-items: center; /* This vertically centers the children in the container */
+    gap: 15px; /* This creates space between the hamburger icon and the title */
+    flex-wrap: wrap; /* This allows items to wrap onto multiple lines if needed */
+
+}
+
+
+
+.sidebar {
+    height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      padding-top: 20px;
+    transition: width 0.3s;
+    }
+    .sidebar a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #818181;
+      display: block;
+    }
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+    .main-content {
+      display: block;
+      margin-left: 250px;
+      padding: 1px 16px;
+      height: 1000px;
+    }
+
+ /* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  
+  .sidebar a.active {
+    font-weight: bold;
+    color: yellow;
+  }
+
+/* Add styles for the hamburger button */
+.hamburger {
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+
+@media (max-width: 991px) {
+
+      #sidebar-container{
+        width: 250px; /* Set width to 0 to hide the sidebar */
+        transform: translateX(-250px); /* Start off-screen to the left */
+        transition: transform 0.3s ease; /* Animate the transform property */
+    }
+
+    /* Active state for the sidebar */
+     #sidebar-container.active {
+        transform: translateX(0); /* Move into view */
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove margin when sidebar is hidden */
+    }
+
+    .hamburger {
+        display: block; /* Show the hamburger button on smaller screens */
+        position: absolute;
+
+    }
+
+    h2{
+        font-size: 20px;
+    }
+
+
+
+
+}
+
+@media (max-width: 767px) {
+    h2{
+        font-size: 16px;
+    }
+
+}
+
+
+
+
+
