@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --backgroud: #fffffe;
+    --secondary-color: #1D4DA1;
+    --highlight-color: #FFDA4B;
+    --text: #5f6c7b;
+    --button-color: #3da9fc
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --main-color: #1f1235;
+    --background-color: #1D4DA1;
+}
+
+body {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background: white;
+
+
+}
+
+#FormContainer {
+    background-color: #ffffffa1;
+    backdrop-filter: blur(10px);
+    border: 2px solid #ffffff6d;
+    width: 760px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 11px 1.5px #0000002b;
+    font-family: Poppins;
+    padding: 10px;
+    height: 550px;
+
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+h1 {
+    padding: 20px;
+    color: var(--main-color);
+    font-size: 2.1rem;
+    font-weight: 800;
+    grid-column: 1/span 2;
+}
+
+.ImgContainer {
+    overflow: hidden;
+    border-radius: 10px;
+    background: url(../image/PHCS-logo.jpg);
+    background-size: 100% 100%;
+}
+
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.Name,
+.password {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+
+}
+
+form li {
+    list-style-type: none;
+
+    display: flex;
+    flex-direction: column;
+    padding: 0px 5px;
+    text-align: left;
+
+}
+
+form label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: 100%;
+    padding: 5px 15px;
+    color: var(--main-color);
+}
+
+form input,
+form select {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #ffffff6d;
+    width: 100%;
+    outline: none;
+    color: var(--main-color);
+    margin-bottom: 10px;
+    border: 1px solid #0000006d;
+}
+
+form input:focus,
+form select:focus,
+form input:hover,
+form select:hover {
+    border: 1px solid var(--main-color);
+}
+
+form .course {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+form select {
+    width: 100%;
+}
+
+form .course input {
+    flex: 1;
+    width: 100%;
+}
+
+
+form button {
+    width: fit-content;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    color: white;
+    background-color: var(--main-color);
+    border: none;
+    cursor: pointer;
+    margin: auto;
+}
+
+a {
+    display: block;
+    text-align: right;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: .3s;
+}
+
+a:hover {
+    color: #38d39f;
+}
+
+@media (max-width:700px) {
+    .ImgContainer {
+        display: none;
+    }
+
+
+    #FormContainer {
+        grid-template-columns: 100%;
+        width: 380px;
+    }
+
+
+}
+
+@media (max-width:430px) {
+    #FormContainer {
+        border-radius: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .Name,
+    .course,
+    .password {
+        display: block;
+    }
+
+    @media (max-width:430px) {
+        #FormContainer {
+            border-radius: 0px;
+            width: 100%;
+            height: 100%;
+        }
+    
+        .Name,
+        .course,
+        .password {
+            display: block;
+        }
+    }
+}

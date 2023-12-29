@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+
+</head>
+<body>
+
+    <h1>ADD ROOM</h1>
+
+
+    <form id="user-form">
+        <input type="text" id="RoomId" placeholder="Enter Room Id" required>
+        <input type="text" id="DevicesName" placeholder="Enter Devices" required>
+        <input type="text" id="Status" placeholder="Enter Status" required>
+
+        <button type="submit">Submit</button>
+      </form>
+
+    <script>
+        // Your web app's Firebase configuration (replace with your own config)
+            var firebaseConfig = {
+        apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+        authDomain: "phcp-smartlight.firebaseapp.com",
+        databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "phcp-smartlight",
+        storageBucket: "phcp-smartlight.appspot.com",
+        messagingSenderId: "208487238165",
+        appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+    };
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                // User is not logged in, redirect to login page
+                window.location.href = '../admin-login.html';
+            } else {
+                // User is logged in, show homepage content
+                // You can also perform other actions here as needed
+            }
+        });
+
+
+        // Handle form submission
+        document.getElementById('user-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Get values from form
+        var RoomId = document.getElementById('RoomId').value;
+        var DevicesName = document.getElementById('DevicesName').value;
+        var Status = document.getElementById('Status').value;
+
+
+        // Create a new user object
+        var newDevices = {
+            RoomId: RoomId,
+            DevicesName: DevicesName,
+            Status: Status,
+
+        };
+
+        // Push new user to Firebase Realtime Database
+        database.ref('devices').push(newDevices);
+        });
+
+       
+
+// wZHHmYLNNbWzKNpuB7N0KGfsvOB2
+
+
+    </script>
+
+</body>
+</html>
