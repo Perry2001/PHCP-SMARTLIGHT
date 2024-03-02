@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <!--  icon-->
     <link rel="icon" href="../logo.png">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="howitworks.css">
     <!-- Include Firebase Libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
@@ -15,30 +17,123 @@
     <script src="js/firebase-init.js"></script>
 
 </head>
+
 <body>
 
-<div id="sidebar-container" class="sidebar"></div>
+    <div id="sidebar-container" class="sidebar"></div>
 
 
-<div class="main-content">
+    <div class="main-content">
 
-    <div class="header">
-        <div class="header-content my-4 ">
-            <button class="hamburger" aria-label="Open sidebar" onclick="toggleSidebar()">&#9776;</button>
-            <h2 class="ml-5">PHCP Smartlight Wireless Switch Controller and Monitoring system with ESP8266 Integration</h2>
+        <div class="header">
+            <div class="header-content my-4 ">
+                <button class="hamburger" aria-label="Open sidebar" onclick="toggleSidebar()">&#9776;</button>
+                <h2 class="ml-5">CCS Office Smartlight Wireless Switch Controller and Monitoring system with ESP8266
+                    Integration</h2>
+            </div>
+        </div>
+
+
+        <h1>How it Works</h1>
+
+        <div class="instruction">
+            <ul>
+                <li class="title">Power On the Hardware:
+                    <ul>
+                        <li>Locate the power button on the hardware device.</li>
+                        <li>Press to turn on the device.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Connect to Hardware Hotspot:
+                    <ul>
+                        <li>Once the hardware is powered on, it will emit a hotspot signal.</li>
+                        <li>On your device, go to Wi-Fi settings and connect to the hotspot produced by the hardware.
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="title">Access Captive Portal:
+                    <ul>
+                        <li>Open a web browser on your device.</li>
+                        <li>Upon connecting to the hardware hotspot, a captive portal page should automatically appear.
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="title">View Available Access Points:
+                    <ul>
+                        <li>The captive portal will display a list of available access points.</li>
+                        <li>Select the desired Wi-Fi network from the list.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Input Wi-Fi Credentials:
+                    <ul>
+                        <li>Enter the credentials (SSID and password) of the selected Wi-Fi network.</li>
+                        <li>Confirm the information and proceed.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Wait for Hardware Restart:
+                    <ul>
+                        <li>After entering the credentials, wait for the hardware to restart.</li>
+                        <li>The device will automatically attempt to connect to the specified Wi-Fi network.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Automatic Wi-Fi Connection:
+                    <ul>
+                        <li>Once the hardware restarts, it will automatically connect to the Wi-Fi network using the
+                            provided credentials.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Hotspot Disappearance:
+                    <ul>
+                        <li>After a successful connection, the hardware hotspot will disappear from the available Wi-Fi
+                            networks.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Open Web Application:
+                    <ul>
+                        <li>Launch a web browser on your device.</li>
+                    </ul>
+                </li>
+
+                <li class="title">Login to Web Application:
+                    <ul>
+                        <li>Enter the web application's URL in the browser.</li>
+                        <li>Log in using the appropriate credentials.</li>
+                    </ul>
+                </li>
+                <li class="title">Homepage
+                    <ul>
+                        <li>Click View to specific room to control.</li>
+                        <li>Switch the toggle switch to On or Off any device</li>
+                    </ul>
+                </li>
+                <!--
+                <li class="title">Logs:
+                    <ul>
+                        <li>Enter the web application's URL in the browser.</li>
+                        <li>Log in using the appropriate credentials.</li>
+                    </ul>
+                </li>
+                -->
+            </ul>
+
         </div>
     </div>
 
 
-    <h1>How it Works</h1>
-</div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-
-
-<script src="js/sidebar.js"></script>
+    <script src="js/sidebar.js"></script>
 
 
 </body>
+
 </html>
