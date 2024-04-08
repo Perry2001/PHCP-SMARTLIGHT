@@ -14,13 +14,20 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
     <link rel="stylesheet" href="./css/register.css">
 
-
-
+    <style>
+        /* Custom CSS for alert */
+        .error-alert {
+            color: red;
+            /* Set text color to red */
+            font-size: 18px;
+            /* Set font size to 18 pixels */
+        }
+    </style>
 </head>
 
 <body>
 
-<div id="FormContainer">
+    <div id="FormContainer">
         <div class="ImgContainer"></div>
         <form action="#" method="post">
             <h1 id="FormHeading">Sign Up</h1>
@@ -41,7 +48,8 @@
                         <option value="Teacher">Teacher</option>
                     </select>
                 </li>
-                <li><label>ID Number:</label> <input type="text" id="idNum" name="idNum" pattern="\d{4}-\d{4}" placeholder="1234-1234"  required>
+                <li><label>ID Number:</label> <input type="text" id="idNum" name="idNum" pattern="\d{4}"
+                        placeholder="1234" required maxlength="4">
                 </li>
             </div>
             <li>
@@ -58,24 +66,24 @@
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
-          apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
-          authDomain: "phcp-smartlight.firebaseapp.com",
-          databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "phcp-smartlight",
-          storageBucket: "phcp-smartlight.appspot.com",
-          messagingSenderId: "208487238165",
-          appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
+            apiKey: "AIzaSyCd3Xzw_AmhSbMcfbwHyMrKFR_GxK2OqrA",
+            authDomain: "phcp-smartlight.firebaseapp.com",
+            databaseURL: "https://phcp-smartlight-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "phcp-smartlight",
+            storageBucket: "phcp-smartlight.appspot.com",
+            messagingSenderId: "208487238165",
+            appId: "1:208487238165:web:9e9204ba8ee03c3f525c1c"
         };
         // Initialize Firebase
-      
-       // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
 
 
-const database = firebase.database(app);
+        const database = firebase.database(app);
 
         // Function to handle signup
-    function signup() {
+        function signup() {
 
             // Get values from form
             var firstName = document.getElementById('firstName').value;
@@ -105,28 +113,28 @@ const database = firebase.database(app);
                     // Signed in 
                     var user = userCredential.user;
 
-                // Create a new user object
-                var newUser = {
-                id: user.uid,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                position: "Teacher",
-                idNum: idNum,
-                phone: phone,
-                status: "pending",
-            };
+                    // Create a new user object
+                    var newUser = {
+                        id: user.uid,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        position: "Teacher",
+                        idNum: idNum,
+                        phone: phone,
+                        status: "pending",
+                    };
 
-            // Push new user to Firebase Realtime Database
-            firebase.database().ref('user').push(newUser, function(error) {
-                if (error) {
-                    alert('Error creating user.');
+                    // Push new user to Firebase Realtime Database
+                    firebase.database().ref('user').push(newUser, function (error) {
+                        if (error) {
+                            alert('Error creating user.');
 
-                } else {
-                    alert('Admin will review your account.');
-                    window.location.href = 'index.html';
-                }
-            });
+                        } else {
+                            alert('Admin will review your account.');
+                            window.location.href = 'index.html';
+                        }
+                    });
 
                     // ...
                 })
@@ -134,23 +142,44 @@ const database = firebase.database(app);
                     var errorCode = error.code;
                     var errorMessage = error.message;
                     console.log(errorMessage);
+                    if (errorCode === 'auth/email-already-in-use') {
+                        showAlert('Email is already taken.');
+                    } else {
+                        showAlert(errorMessage);
+                    }
                 });
 
-          
+
         }
 
+        function showAlert(message) {
 
-        document.addEventListener('DOMContentLoaded', function() {
-        // Attach signup function to the form's submit event
-        document.querySelector('form').addEventListener('submit', function(e) {
-          e.preventDefault();
-          signup();
+    // Change the text content and style of the email input
+    var emailInput = document.getElementById('email');
+    emailInput.value = "Email already taken";
+    emailInput.style.color = "red";
+    emailInput.style.fontWeight = "bold"; // Optional: Set font weight to bold for emphasis
+
+    setTimeout(function() {
+        // Reset the email input after 5 seconds
+        emailInput.value = "";
+        emailInput.style.color = ""; // Reset the color to default
+        emailInput.style.fontWeight = ""; // Reset the font weight
+    }, 3000); // Remove the alert after 5 seconds
+}
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Attach signup function to the form's submit event
+            document.querySelector('form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                signup();
+            });
         });
-      });  
-      </script>
-    
+    </script>
 
-      
+
+
 
 </body>
 
