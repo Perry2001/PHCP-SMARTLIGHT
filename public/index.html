@@ -22,6 +22,9 @@
 </head>
 
 <body>
+  <header class="containerHeader">
+    <h1>Admission Office Smartlight Wireless Switch Controller and Monitoring system with ESP8266 Integration</h1>
+  </header>
   <img class="wave" src="./image/wave.svg">
   <div class="container">
     <div class="img">
@@ -158,9 +161,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
+<Style>
+  /* CSS for larger screens */
+.containerHeader {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* CSS for smaller screens */
+@media (max-width: 768px) {
+  .containerHeader {
+    padding: 10 20px;
+    font-size: 12px;
+  }
+  body{
+    overflow: scroll !important;
+  }
+}
+
+/* Additional CSS for even smaller screens */
+@media (max-width: 576px) {
+  .containerHeader {
+    padding: 40px;
+    font-size: 8px;
+  }
+  body{
+    overflow: scroll !important;
+  }
+}
+
+</Style>
+
 </body>
 
 
 
 
 </html>
+
